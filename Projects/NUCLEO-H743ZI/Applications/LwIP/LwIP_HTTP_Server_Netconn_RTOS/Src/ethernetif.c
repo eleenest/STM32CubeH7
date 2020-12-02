@@ -29,6 +29,8 @@
 #include "../Components/lan8742/lan8742.h"
 #include <string.h>
 
+#include "stm32h7xx_nest_udb.h"
+
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* The time to block waiting for input. */
@@ -642,7 +644,9 @@ void ethernet_link_thread( void const * argument )
       }
     }
     
+    BSP_LED_Toggle(LED2);
     osDelay(100);
+    BSP_LED_Toggle(LED2);
   }
 }
 

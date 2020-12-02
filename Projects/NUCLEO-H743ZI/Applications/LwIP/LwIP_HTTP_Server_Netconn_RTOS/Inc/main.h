@@ -27,7 +27,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32h7xx_hal.h"
-#include "stm32h7xx_nucleo.h"
+// #include "stm32h7xx_nucleo.h"
+#include "stm32h7xx_nest_udb.h"
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
@@ -35,8 +36,8 @@
 /*Static IP ADDRESS*/
 #define IP_ADDR0   192
 #define IP_ADDR1   168
-#define IP_ADDR2   0
-#define IP_ADDR3   10
+#define IP_ADDR2   86
+#define IP_ADDR3   100
    
 /*NETMASK*/
 #define NETMASK_ADDR0   255
@@ -47,7 +48,7 @@
 /*Gateway Address*/
 #define GW_ADDR0   192
 #define GW_ADDR1   168
-#define GW_ADDR2   0
+#define GW_ADDR2   86
 #define GW_ADDR3   1
 
 /* Exported macro ------------------------------------------------------------*/

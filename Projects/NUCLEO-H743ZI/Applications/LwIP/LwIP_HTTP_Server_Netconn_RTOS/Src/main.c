@@ -112,8 +112,22 @@ static void StartThread(void const * argument)
   */
 static void BSP_Config(void)
 {
+  BSP_LED_Init(LED1);
   BSP_LED_Init(LED2);
   BSP_LED_Init(LED3);
+  
+  BSP_LED_Toggle(LED1);
+  HAL_Delay(500);  //osDelay(500);
+  BSP_LED_Toggle(LED1);
+  
+  BSP_LED_Toggle(LED2);
+  HAL_Delay(500);  //osDelay(500);
+  BSP_LED_Toggle(LED2);
+  
+  BSP_LED_Toggle(LED3);
+  HAL_Delay(500);  //osDelay(500);
+  BSP_LED_Toggle(LED3);
+  
 }
 
 /**
@@ -159,87 +173,282 @@ static void Netif_Config(void)
 #endif 
 }
 
-/**
-  * @brief  System Clock Configuration
-  *         The system Clock is configured as follow : 
-  *            System Clock source            = PLL (HSE BYPASS)
-  *            SYSCLK(Hz)                     = 400000000 (CPU Clock)
-  *            HCLK(Hz)                       = 200000000 (AXI and AHBs Clock)
-  *            AHB Prescaler                  = 2
-  *            D1 APB3 Prescaler              = 2 (APB3 Clock  100MHz)
-  *            D2 APB1 Prescaler              = 2 (APB1 Clock  100MHz)
-  *            D2 APB2 Prescaler              = 2 (APB2 Clock  100MHz)
-  *            D3 APB4 Prescaler              = 2 (APB4 Clock  100MHz)
-  *            HSE Frequency(Hz)              = 8000000
-  *            PLL_M                          = 4
-  *            PLL_N                          = 400
-  *            PLL_P                          = 2
-  *            PLL_Q                          = 4
-  *            PLL_R                          = 2
-  *            VDD(V)                         = 3.3
-  *            Flash Latency(WS)              = 4
-  * @param  None
-  * @retval None
-  */
-static void SystemClock_Config(void)
+//201111: ELee, add for SystemClock_Config...
+void Error_Handler(void)
 {
-  RCC_ClkInitTypeDef RCC_ClkInitStruct;
-  RCC_OscInitTypeDef RCC_OscInitStruct;
-  HAL_StatusTypeDef ret = HAL_OK;
-  
-  /*!< Supply configuration update enable */
-  HAL_PWREx_ConfigSupply(PWR_LDO_SUPPLY);
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
 
-  /* The voltage scaling allows optimizing the power consumption when the device is
-     clocked below the maximum system frequency, to update the voltage scaling value
-     regarding system frequency refer to product datasheet.  */
+  /* USER CODE END Error_Handler_Debug */
+}
+
+
+
+////From stm32cubeMX, set to 25 MHz ext clock.
+/////Users/eleenest/2006_debug_folder/2007_UDB_InitialBringupCode/200701_UDB_InitialBringup_01/200701_UDB_InitialBringup_01.ioc
+//void SystemClock_Config(void)
+//{
+//  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+//  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+//  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
+
+//  /** Supply configuration update enable
+//  */
+//  HAL_PWREx_ConfigSupply(PWR_LDO_SUPPLY);
+//  /** Configure the main internal regulator output voltage
+//  */
+//  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE3);
+
+//  while(!__HAL_PWR_GET_FLAG(PWR_FLAG_VOSRDY)) {}
+//  /** Macro to configure the PLL clock source
+//  */
+//  __HAL_RCC_PLL_PLLSOURCE_CONFIG(RCC_PLLSOURCE_HSE);
+//  /** Initializes the CPU, AHB and APB busses clocks
+//  */
+//  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+//  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+//  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+//  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+//  RCC_OscInitStruct.PLL.PLLM = 25;
+//  RCC_OscInitStruct.PLL.PLLN = 384;
+//  RCC_OscInitStruct.PLL.PLLP = 6;
+//  RCC_OscInitStruct.PLL.PLLQ = 8;
+//  RCC_OscInitStruct.PLL.PLLR = 2;
+//  RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1VCIRANGE_0;
+//  RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
+//  RCC_OscInitStruct.PLL.PLLFRACN = 0;
+//  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+//  /** Initializes the CPU, AHB and APB busses clocks
+//  */
+//  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+//                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2
+//                              |RCC_CLOCKTYPE_D3PCLK1|RCC_CLOCKTYPE_D1PCLK1;
+//  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+//  RCC_ClkInitStruct.SYSCLKDivider = RCC_SYSCLK_DIV1;
+//  RCC_ClkInitStruct.AHBCLKDivider = RCC_HCLK_DIV1;
+//  RCC_ClkInitStruct.APB3CLKDivider = RCC_APB3_DIV1;
+//  RCC_ClkInitStruct.APB1CLKDivider = RCC_APB1_DIV1;
+//  RCC_ClkInitStruct.APB2CLKDivider = RCC_APB2_DIV1;
+//  RCC_ClkInitStruct.APB4CLKDivider = RCC_APB4_DIV1;
+
+//  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+//  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USART3|RCC_PERIPHCLK_USART2
+//                              |RCC_PERIPHCLK_UART4|RCC_PERIPHCLK_USART6
+//                              |RCC_PERIPHCLK_USART1|RCC_PERIPHCLK_SPI5
+//                              |RCC_PERIPHCLK_SPI4|RCC_PERIPHCLK_SPI2
+//                              |RCC_PERIPHCLK_I2C2|RCC_PERIPHCLK_I2C3
+//                              |RCC_PERIPHCLK_ADC|RCC_PERIPHCLK_I2C1
+//                              |RCC_PERIPHCLK_USB|RCC_PERIPHCLK_QSPI;
+//  PeriphClkInitStruct.PLL2.PLL2M = 2;
+//  PeriphClkInitStruct.PLL2.PLL2N = 12;
+//  PeriphClkInitStruct.PLL2.PLL2P = 1;
+//  PeriphClkInitStruct.PLL2.PLL2Q = 2;
+//  PeriphClkInitStruct.PLL2.PLL2R = 2;
+//  PeriphClkInitStruct.PLL2.PLL2RGE = RCC_PLL2VCIRANGE_3;
+//  PeriphClkInitStruct.PLL2.PLL2VCOSEL = RCC_PLL2VCOMEDIUM;
+//  PeriphClkInitStruct.PLL2.PLL2FRACN = 0;
+//  PeriphClkInitStruct.QspiClockSelection = RCC_QSPICLKSOURCE_D1HCLK;
+//  PeriphClkInitStruct.Spi123ClockSelection = RCC_SPI123CLKSOURCE_PLL;
+//  PeriphClkInitStruct.Spi45ClockSelection = RCC_SPI45CLKSOURCE_D2PCLK1;
+//  PeriphClkInitStruct.Usart234578ClockSelection = RCC_USART234578CLKSOURCE_D2PCLK1;
+//  PeriphClkInitStruct.Usart16ClockSelection = RCC_USART16CLKSOURCE_D2PCLK2;
+//  PeriphClkInitStruct.I2c123ClockSelection = RCC_I2C123CLKSOURCE_D2PCLK1;
+//  PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_PLL;
+//  PeriphClkInitStruct.AdcClockSelection = RCC_ADCCLKSOURCE_PLL2;
+//  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+//  HAL_RCC_MCOConfig(RCC_MCO2, RCC_MCO2SOURCE_SYSCLK, RCC_MCODIV_1);
+//  /** Enable USB Voltage detector
+//  */
+//  HAL_PWREx_EnableUSBVoltageDetector();
+//}
+
+
+///**
+//  * @brief  System Clock Configuration
+//  *         The system Clock is configured as follow : 
+//  *            System Clock source            = PLL (HSE BYPASS)
+//  *            SYSCLK(Hz)                     = 400000000 (CPU Clock)
+//  *            HCLK(Hz)                       = 200000000 (AXI and AHBs Clock)
+//  *            AHB Prescaler                  = 2
+//  *            D1 APB3 Prescaler              = 2 (APB3 Clock  100MHz)
+//  *            D2 APB1 Prescaler              = 2 (APB1 Clock  100MHz)
+//  *            D2 APB2 Prescaler              = 2 (APB2 Clock  100MHz)
+//  *            D3 APB4 Prescaler              = 2 (APB4 Clock  100MHz)
+//  *            HSE Frequency(Hz)              = 8000000
+//  *            PLL_M                          = 4
+//  *            PLL_N                          = 400
+//  *            PLL_P                          = 2
+//  *            PLL_Q                          = 4
+//  *            PLL_R                          = 2
+//  *            VDD(V)                         = 3.3
+//  *            Flash Latency(WS)              = 4
+//  * @param  None
+//  * @retval None
+//  */
+//static void SystemClock_Config(void)
+//{
+//  RCC_ClkInitTypeDef RCC_ClkInitStruct;
+//  RCC_OscInitTypeDef RCC_OscInitStruct;
+//  HAL_StatusTypeDef ret = HAL_OK;
+//  
+//  /*!< Supply configuration update enable */
+//  HAL_PWREx_ConfigSupply(PWR_LDO_SUPPLY);
+
+//  /* The voltage scaling allows optimizing the power consumption when the device is
+//     clocked below the maximum system frequency, to update the voltage scaling value
+//     regarding system frequency refer to product datasheet.  */
+//  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+
+//  while(!__HAL_PWR_GET_FLAG(PWR_FLAG_VOSRDY)) {}
+//  
+//  /* Enable D2 domain SRAM3 Clock (0x30040000 AXI)*/
+//  __HAL_RCC_D2SRAM3_CLK_ENABLE();
+//  
+//  /* Enable HSE Oscillator and activate PLL with HSE as source */
+//  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+//  RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
+//  RCC_OscInitStruct.HSIState = RCC_HSI_OFF;
+//  RCC_OscInitStruct.CSIState = RCC_CSI_OFF;
+//  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+//  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+
+//  RCC_OscInitStruct.PLL.PLLM = 4;
+//  RCC_OscInitStruct.PLL.PLLN = 400;
+//  RCC_OscInitStruct.PLL.PLLFRACN = 0;
+//  RCC_OscInitStruct.PLL.PLLP = 2;
+//  RCC_OscInitStruct.PLL.PLLR = 2;
+//  RCC_OscInitStruct.PLL.PLLQ = 4;
+
+//  RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
+//  RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1VCIRANGE_1;
+//  ret = HAL_RCC_OscConfig(&RCC_OscInitStruct);
+//  if(ret != HAL_OK)
+//  {
+//    while(1);
+//  }
+//  
+//  /* Select PLL as system clock source and configure  bus clocks dividers */
+//  RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_D1PCLK1 | RCC_CLOCKTYPE_PCLK1 | \
+//                                 RCC_CLOCKTYPE_PCLK2  | RCC_CLOCKTYPE_D3PCLK1);
+
+//  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+//  RCC_ClkInitStruct.SYSCLKDivider = RCC_SYSCLK_DIV1;
+//  RCC_ClkInitStruct.AHBCLKDivider = RCC_HCLK_DIV2;
+//  RCC_ClkInitStruct.APB3CLKDivider = RCC_APB3_DIV2;  
+//  RCC_ClkInitStruct.APB1CLKDivider = RCC_APB1_DIV2; 
+//  RCC_ClkInitStruct.APB2CLKDivider = RCC_APB2_DIV2; 
+//  RCC_ClkInitStruct.APB4CLKDivider = RCC_APB4_DIV2; 
+//  ret = HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4);
+//  if(ret != HAL_OK)
+//  {
+//    while(1);
+//  }
+//}
+
+
+//201202 Elee: This was generated from STM32CubeMX, for 400 MHz core clock, from a 25MHz xtal.
+//  Note: the Nucleo uses a 8MHz xtal, so the same setting do NOT work here (25 MHz xtal).  
+//  https://docs.google.com/document/d/1XCrZD8J7us6lCtmvS9VUuMlp1-7R1YANeTN24Fm035M/edit#heading=h.oz7p80avbxql
+// 
+void SystemClock_Config(void)
+{
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
+
+  /** Supply configuration update enable 
+  */
+  HAL_PWREx_ConfigSupply(PWR_LDO_SUPPLY);
+  /** Configure the main internal regulator output voltage 
+  */
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
   while(!__HAL_PWR_GET_FLAG(PWR_FLAG_VOSRDY)) {}
-  
-  /* Enable D2 domain SRAM3 Clock (0x30040000 AXI)*/
-  __HAL_RCC_D2SRAM3_CLK_ENABLE();
-  
-  /* Enable HSE Oscillator and activate PLL with HSE as source */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
-  RCC_OscInitStruct.HSIState = RCC_HSI_OFF;
-  RCC_OscInitStruct.CSIState = RCC_CSI_OFF;
+  /** Macro to configure the PLL clock source 
+  */
+  __HAL_RCC_PLL_PLLSOURCE_CONFIG(RCC_PLLSOURCE_HSE);
+  /** Initializes the CPU, AHB and APB busses clocks 
+  */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48|RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-
-  RCC_OscInitStruct.PLL.PLLM = 4;
-  RCC_OscInitStruct.PLL.PLLN = 400;
-  RCC_OscInitStruct.PLL.PLLFRACN = 0;
+  RCC_OscInitStruct.PLL.PLLM = 10;
+  RCC_OscInitStruct.PLL.PLLN = 320;
   RCC_OscInitStruct.PLL.PLLP = 2;
+  RCC_OscInitStruct.PLL.PLLQ = 8;
   RCC_OscInitStruct.PLL.PLLR = 2;
-  RCC_OscInitStruct.PLL.PLLQ = 4;
-
-  RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
   RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1VCIRANGE_1;
-  ret = HAL_RCC_OscConfig(&RCC_OscInitStruct);
-  if(ret != HAL_OK)
+  RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
+  RCC_OscInitStruct.PLL.PLLFRACN = 0;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
-    while(1);
+    Error_Handler();
   }
-  
-  /* Select PLL as system clock source and configure  bus clocks dividers */
-  RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_D1PCLK1 | RCC_CLOCKTYPE_PCLK1 | \
-                                 RCC_CLOCKTYPE_PCLK2  | RCC_CLOCKTYPE_D3PCLK1);
-
+  /** Initializes the CPU, AHB and APB busses clocks 
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2
+                              |RCC_CLOCKTYPE_D3PCLK1|RCC_CLOCKTYPE_D1PCLK1;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.SYSCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_HCLK_DIV2;
-  RCC_ClkInitStruct.APB3CLKDivider = RCC_APB3_DIV2;  
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_APB1_DIV2; 
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_APB2_DIV2; 
-  RCC_ClkInitStruct.APB4CLKDivider = RCC_APB4_DIV2; 
-  ret = HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4);
-  if(ret != HAL_OK)
+  RCC_ClkInitStruct.APB3CLKDivider = RCC_APB3_DIV2;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_APB1_DIV2;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_APB2_DIV2;
+  RCC_ClkInitStruct.APB4CLKDivider = RCC_APB4_DIV2;
+
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
   {
-    while(1);
+    Error_Handler();
   }
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USART3|RCC_PERIPHCLK_USART2
+                              |RCC_PERIPHCLK_UART4|RCC_PERIPHCLK_USART6
+                              |RCC_PERIPHCLK_USART1|RCC_PERIPHCLK_SPI5
+                              |RCC_PERIPHCLK_SPI4|RCC_PERIPHCLK_SPI2
+                              |RCC_PERIPHCLK_I2C2|RCC_PERIPHCLK_I2C3
+                              |RCC_PERIPHCLK_ADC|RCC_PERIPHCLK_I2C1
+                              |RCC_PERIPHCLK_USB|RCC_PERIPHCLK_QSPI;
+  PeriphClkInitStruct.PLL2.PLL2M = 2;
+  PeriphClkInitStruct.PLL2.PLL2N = 12;
+  PeriphClkInitStruct.PLL2.PLL2P = 1;
+  PeriphClkInitStruct.PLL2.PLL2Q = 2;
+  PeriphClkInitStruct.PLL2.PLL2R = 2;
+  PeriphClkInitStruct.PLL2.PLL2RGE = RCC_PLL2VCIRANGE_3;
+  PeriphClkInitStruct.PLL2.PLL2VCOSEL = RCC_PLL2VCOMEDIUM;
+  PeriphClkInitStruct.PLL2.PLL2FRACN = 0;
+  PeriphClkInitStruct.QspiClockSelection = RCC_QSPICLKSOURCE_D1HCLK;
+  PeriphClkInitStruct.Spi123ClockSelection = RCC_SPI123CLKSOURCE_PLL;
+  PeriphClkInitStruct.Spi45ClockSelection = RCC_SPI45CLKSOURCE_D2PCLK1;
+  PeriphClkInitStruct.Usart234578ClockSelection = RCC_USART234578CLKSOURCE_D2PCLK1;
+  PeriphClkInitStruct.Usart16ClockSelection = RCC_USART16CLKSOURCE_D2PCLK2;
+  PeriphClkInitStruct.I2c123ClockSelection = RCC_I2C123CLKSOURCE_D2PCLK1;
+  PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;
+  PeriphClkInitStruct.AdcClockSelection = RCC_ADCCLKSOURCE_PLL2;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  HAL_RCC_MCOConfig(RCC_MCO2, RCC_MCO2SOURCE_SYSCLK, RCC_MCODIV_1);
+  /** Enable USB Voltage detector 
+  */
+  HAL_PWREx_EnableUSBVoltageDetector();
 }
+
+
+
+
+
 
 /**
   * @brief  Configure the MPU attributes 

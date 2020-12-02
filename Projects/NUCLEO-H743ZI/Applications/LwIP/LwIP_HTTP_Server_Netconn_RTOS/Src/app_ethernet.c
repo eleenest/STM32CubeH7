@@ -25,6 +25,8 @@
 #include "app_ethernet.h"
 #include "ethernetif.h"
 
+#include "stm32h7xx_nest_udb.h"
+
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -138,7 +140,9 @@ void DHCP_Thread(void const * argument)
     }
     
     /* wait 500 ms */
+    BSP_LED_Toggle(LED1);
     osDelay(500);
+    //BSP_LED_Toggle(LED1);
   }
 }
 #endif  /* LWIP_DHCP */
