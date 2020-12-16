@@ -233,6 +233,20 @@ The STM32H7xx allows computing and verifying the IP, UDP, TCP and ICMP checksums
 #define TCPIP_THREAD_PRIO               osPriorityHigh
 
 
+// 201203: eleenest, enable debugging
+#define LWIP_DEBUG 1
+
+#define TCP_DEBUG                       LWIP_DBG_ON
+#define ETHARP_DEBUG                    LWIP_DBG_ON
+#define PBUF_DEBUG                      LWIP_DBG_ON
+#define IP_DEBUG                        LWIP_DBG_ON
+#define TCPIP_DEBUG                     LWIP_DBG_ON
+#define DHCP_DEBUG                      LWIP_DBG_ON
+#define UDP_DEBUG                       LWIP_DBG_ON
+
+
+
+
 #endif /* __LWIPOPTS_H__ */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

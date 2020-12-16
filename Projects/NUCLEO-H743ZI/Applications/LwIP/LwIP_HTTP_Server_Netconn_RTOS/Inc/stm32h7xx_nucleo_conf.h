@@ -48,7 +48,7 @@
 #define USE_NUCLEO_H743ZI2
 
 /* COM define */
-#define USE_COM_LOG                         0U
+#define USE_COM_LOG                         1U   //eleenest 0U
 #define USE_BSP_COM_FEATURE                 1U
 
 /* IRQ priorities */

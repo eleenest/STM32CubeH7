@@ -75,6 +75,13 @@ int main(void)
   osThreadDef(Start, StartThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE * 4);
   osThreadCreate (osThread(Start), NULL);
   
+  //elee: debugging, getting com port working...
+
+  printf("Testing com port output\r\n");
+  char str[] = "1234abcd";
+  HAL_UART_Transmit (&hcom_uart [0], (uint8_t *) &str, 8, COM_POLL_TIMEOUT);
+
+
   /* Start scheduler */
   osKernelStart();
   
@@ -112,22 +119,23 @@ static void StartThread(void const * argument)
   */
 static void BSP_Config(void)
 {
-  BSP_LED_Init(LED1);
+  BSP_LED_Init(LED1); //eleenest
   BSP_LED_Init(LED2);
   BSP_LED_Init(LED3);
-  
+
   BSP_LED_Toggle(LED1);
   HAL_Delay(500);  //osDelay(500);
   BSP_LED_Toggle(LED1);
-  
+
   BSP_LED_Toggle(LED2);
   HAL_Delay(500);  //osDelay(500);
   BSP_LED_Toggle(LED2);
-  
+
   BSP_LED_Toggle(LED3);
   HAL_Delay(500);  //osDelay(500);
   BSP_LED_Toggle(LED3);
-  
+
+  //ToDo: add comport initialization here.
 }
 
 /**
@@ -184,7 +192,7 @@ void Error_Handler(void)
 
 
 
-////From stm32cubeMX, set to 25 MHz ext clock.
+////From stm32cubeMX, set to 25 MHz ext clock (and 64 MHz core clock).
 /////Users/eleenest/2006_debug_folder/2007_UDB_InitialBringupCode/200701_UDB_InitialBringup_01/200701_UDB_InitialBringup_01.ioc
 //void SystemClock_Config(void)
 //{
@@ -274,7 +282,7 @@ void Error_Handler(void)
 
 ///**
 //  * @brief  System Clock Configuration
-//  *         The system Clock is configured as follow : 
+//  *         The system Clock is configured as follow :
 //  *            System Clock source            = PLL (HSE BYPASS)
 //  *            SYSCLK(Hz)                     = 400000000 (CPU Clock)
 //  *            HCLK(Hz)                       = 200000000 (AXI and AHBs Clock)
@@ -299,7 +307,7 @@ void Error_Handler(void)
 //  RCC_ClkInitTypeDef RCC_ClkInitStruct;
 //  RCC_OscInitTypeDef RCC_OscInitStruct;
 //  HAL_StatusTypeDef ret = HAL_OK;
-//  
+//
 //  /*!< Supply configuration update enable */
 //  HAL_PWREx_ConfigSupply(PWR_LDO_SUPPLY);
 
@@ -309,10 +317,10 @@ void Error_Handler(void)
 //  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
 //  while(!__HAL_PWR_GET_FLAG(PWR_FLAG_VOSRDY)) {}
-//  
+//
 //  /* Enable D2 domain SRAM3 Clock (0x30040000 AXI)*/
 //  __HAL_RCC_D2SRAM3_CLK_ENABLE();
-//  
+//
 //  /* Enable HSE Oscillator and activate PLL with HSE as source */
 //  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
 //  RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
@@ -335,7 +343,7 @@ void Error_Handler(void)
 //  {
 //    while(1);
 //  }
-//  
+//
 //  /* Select PLL as system clock source and configure  bus clocks dividers */
 //  RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_D1PCLK1 | RCC_CLOCKTYPE_PCLK1 | \
 //                                 RCC_CLOCKTYPE_PCLK2  | RCC_CLOCKTYPE_D3PCLK1);
@@ -343,10 +351,10 @@ void Error_Handler(void)
 //  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
 //  RCC_ClkInitStruct.SYSCLKDivider = RCC_SYSCLK_DIV1;
 //  RCC_ClkInitStruct.AHBCLKDivider = RCC_HCLK_DIV2;
-//  RCC_ClkInitStruct.APB3CLKDivider = RCC_APB3_DIV2;  
-//  RCC_ClkInitStruct.APB1CLKDivider = RCC_APB1_DIV2; 
-//  RCC_ClkInitStruct.APB2CLKDivider = RCC_APB2_DIV2; 
-//  RCC_ClkInitStruct.APB4CLKDivider = RCC_APB4_DIV2; 
+//  RCC_ClkInitStruct.APB3CLKDivider = RCC_APB3_DIV2;
+//  RCC_ClkInitStruct.APB1CLKDivider = RCC_APB1_DIV2;
+//  RCC_ClkInitStruct.APB2CLKDivider = RCC_APB2_DIV2;
+//  RCC_ClkInitStruct.APB4CLKDivider = RCC_APB4_DIV2;
 //  ret = HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4);
 //  if(ret != HAL_OK)
 //  {
@@ -356,27 +364,27 @@ void Error_Handler(void)
 
 
 //201202 Elee: This was generated from STM32CubeMX, for 400 MHz core clock, from a 25MHz xtal.
-//  Note: the Nucleo uses a 8MHz xtal, so the same setting do NOT work here (25 MHz xtal).  
+//  Note: the Nucleo uses a 8MHz xtal, so the original settings do NOT work here (25 MHz xtal).
 //  https://docs.google.com/document/d/1XCrZD8J7us6lCtmvS9VUuMlp1-7R1YANeTN24Fm035M/edit#heading=h.oz7p80avbxql
-// 
+//
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
 
-  /** Supply configuration update enable 
+  /** Supply configuration update enable
   */
   HAL_PWREx_ConfigSupply(PWR_LDO_SUPPLY);
-  /** Configure the main internal regulator output voltage 
+  /** Configure the main internal regulator output voltage
   */
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
   while(!__HAL_PWR_GET_FLAG(PWR_FLAG_VOSRDY)) {}
-  /** Macro to configure the PLL clock source 
+  /** Macro to configure the PLL clock source
   */
   __HAL_RCC_PLL_PLLSOURCE_CONFIG(RCC_PLLSOURCE_HSE);
-  /** Initializes the CPU, AHB and APB busses clocks 
+  /** Initializes the CPU, AHB and APB busses clocks
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48|RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
@@ -395,7 +403,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  /** Initializes the CPU, AHB and APB busses clocks 
+  /** Initializes the CPU, AHB and APB busses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2
@@ -440,7 +448,7 @@ void SystemClock_Config(void)
     Error_Handler();
   }
   HAL_RCC_MCOConfig(RCC_MCO2, RCC_MCO2SOURCE_SYSCLK, RCC_MCODIV_1);
-  /** Enable USB Voltage detector 
+  /** Enable USB Voltage detector
   */
   HAL_PWREx_EnableUSBVoltageDetector();
 }
