@@ -464,7 +464,7 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef *heth)
         RMII_MII_RXER ---------------------> PG2
         RMII_MII_TX_EN --------------------> PG11
         RMII_MII_TXD0 ---------------------> PG13
-        RMII_MII_TXD1 ---------------------> PB13
+        RMII_MII_TXD1 ---------------------> PB13  elee: PG12
   */
 
   /* Configure PA1, PA2 and PA7 */
@@ -476,8 +476,14 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef *heth)
   HAL_GPIO_Init(GPIOA, &GPIO_InitStructure);
   
   /* Configure PB13 */
-  GPIO_InitStructure.Pin = GPIO_PIN_13;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStructure);
+  //GPIO_InitStructure.Pin = GPIO_PIN_13;
+  //HAL_GPIO_Init(GPIOB, &GPIO_InitStructure);  
+  
+  //elee we have TMII_TXD1 on PG12, instead of PB13.  So set PG12 to be AF11
+  /* Configure PG12 */
+  GPIO_InitStructure.Pin = GPIO_PIN_12;
+  HAL_GPIO_Init(GPIOG, &GPIO_InitStructure);  
+  
   
   /* Configure PC1, PC4 and PC5 */
   GPIO_InitStructure.Pin = GPIO_PIN_1 | GPIO_PIN_4 | GPIO_PIN_5;
